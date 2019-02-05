@@ -9,13 +9,12 @@ namespace PeepCam
     {
         public static PeepCam Instance;
 
-        private GameObject _camera;
-        private PlayableGuest _playableGuest;
-        private bool _isActive;
+        private GameObject _playableGuest;
+        private bool _isInGuest = false;
 
         private void Update()
         {
-            if (!_isActive && InputManager.getKeyUp("TheMasterCado@PeepCam/enterPeepCam"))
+            if (!_isInGuest && InputManager.getKeyUp("TheMasterCado@PeepCam/enterPeepCam"))
             {
                 var guest = GuestUnderMouse();
 
@@ -24,7 +23,7 @@ namespace PeepCam
                     EnterGuest(guest);
                 }
             }
-            else if (_isActive && (InputManager.getKeyUp("TheMasterCado@PeepCam/enterPeepCam") || Input.GetKeyUp(KeyCode.Escape)))
+            else if (_isInGuest && (InputManager.getKeyUp("TheMasterCado@PeepCam/enterPeepCam") || Input.GetKeyUp(KeyCode.Escape)))
             {
                 LeaveGuest();
             }
@@ -50,28 +49,24 @@ namespace PeepCam
 
         private void EnterGuest(Guest guest)
         {
-            if (_isActive)
+            if (_isInGuest)
                 return;
 
             Camera.main.GetComponent<CameraController>().enabled = false;
 
-            _playableGuest = new PlayableGuest(guest);
+            _playableGuest = new GameObject();
+            _playableGuest.AddComponent<PlayableGuest>().InitFromGuest(guest);
 
-            _camera = new GameObject();
-            _camera.AddComponent<Camera>().nearClipPlane = 0.01f;
-            _camera.GetComponent<Camera>().farClipPlane = 100f;
-            _camera.AddComponent<AudioListener>();
-            _camera.transform.parent = _playableGuest.Guest.head.transform;
-            _camera.transform.localPosition = new Vector3(-0.09f, -0.13f, 0);
-            _camera.transform.localRotation = Quaternion.Euler(90, 0, 90);
+            _playableGuest.AddComponent<Camera>().nearClipPlane = 0.01f;
+            _playableGuest.GetComponent<Camera>().farClipPlane = 100f;
+            _playableGuest.AddComponent<AudioListener>();
 
-            _isActive = true;
-
+            _isInGuest = true;
         }
 
         private void LeaveGuest()
         {
-            if (!_isActive)
+            if (!_isInGuest)
                 return;
 
             Camera.main.GetComponent<CameraController>().enabled = true;
@@ -79,7 +74,7 @@ namespace PeepCam
             Destroy(_camera);
             Destroy(_imaginaryGuest);
 
-            _isActive = false;
+            _isInGuest = false;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CoasterCam
+namespace PeepCam
 {
     public class MouseLookAround : MonoBehaviour
     {
