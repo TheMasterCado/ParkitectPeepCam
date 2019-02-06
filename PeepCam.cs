@@ -16,7 +16,7 @@ namespace PeepCam
         {
             if (!_isInGuest && InputManager.getKeyUp("TheMasterCado@PeepCam/enterPeepCam"))
             {
-                var guest = GuestUnderMouse();
+                Guest guest = GuestUnderMouse();
 
                 if (guest != null)
                 {
@@ -34,7 +34,7 @@ namespace PeepCam
             LeaveGuest();
         }
 
-        private static Guest GuestUnderMouse()
+        private Guest GuestUnderMouse()
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float distance;
@@ -52,14 +52,8 @@ namespace PeepCam
             if (_isInGuest)
                 return;
 
-            Camera.main.GetComponent<CameraController>().enabled = false;
-
             _playableGuest = new GameObject();
             _playableGuest.AddComponent<PlayableGuest>().InitFromGuest(guest);
-
-            _playableGuest.AddComponent<Camera>().nearClipPlane = 0.01f;
-            _playableGuest.GetComponent<Camera>().farClipPlane = 100f;
-            _playableGuest.AddComponent<AudioListener>();
 
             _isInGuest = true;
         }
@@ -69,10 +63,7 @@ namespace PeepCam
             if (!_isInGuest)
                 return;
 
-            Camera.main.GetComponent<CameraController>().enabled = true;
-
-            Destroy(_camera);
-            Destroy(_imaginaryGuest);
+            Destroy(_playableGuest);
 
             _isInGuest = false;
         }

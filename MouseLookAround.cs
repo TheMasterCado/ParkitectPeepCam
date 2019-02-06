@@ -11,8 +11,8 @@ namespace PeepCam
 
         public RotationAxes Axes = RotationAxes.MouseXAndY;
 
-        private float _sensitivityX = 10F;
-        private float _sensitivityY = 10F;
+        private float _sensitivityX = 7F;
+        private float _sensitivityY = 7F;
         private float _minimumX = -135F;
         private float _maximumX = 135F;
         private float _minimumY = -60F;
