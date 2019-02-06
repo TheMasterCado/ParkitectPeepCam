@@ -53,6 +53,7 @@ namespace PeepCam
                 return;
 
             _playableGuest = new GameObject();
+            _playableGuest.layer = LayerMasks.PEOPLE;
             _playableGuest.AddComponent<PlayableGuest>().InitFromGuest(guest);
 
             _isInGuest = true;

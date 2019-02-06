@@ -8,33 +8,38 @@ namespace PeepCam
     {
         public bool Active = false;
 
-        private float speed = 0.9f;
-        private float runSpeed = 1.7f;
-        private float jumpSpeed = 2.2f;
-        private float gravity = 7.0f;
-        private Vector3 moveDirection = Vector3.zero;
-        private CharacterController cc;
-        private MouseLookAround mla;
-        private Camera camera;
+        private float _speed = 0.9f;
+        private float _runSpeed = 1.7f;
+        private float _jumpSpeed = 2.2f;
+        private float _gravity = 7.0f;
+        private Vector3 _moveDirection = Vector3.zero;
+        private CharacterController _cc;
+        private MouseLookAround _mla;
+        private Camera _camera;
+        private GameObject _origCam;
 
         public void Start()
         {
-            cc = this.gameObject.AddComponent<CharacterController>();
-            cc.radius = 0.3f;
-            cc.height = 0.75f;
+            _origCam = Camera.main.gameObject;
 
-            mla = this.gameObject.AddComponent<MouseLookAround>();
+            _cc = this.gameObject.AddComponent<CharacterController>();
+            _cc.radius = 0.3f;
+            _cc.height = 0.75f;
 
-            Camera.main.gameObject.GetComponent<CameraController>().enabled = false;
-            camera = this.gameObject.AddComponent<Camera>();
-            camera.nearClipPlane = 0.03f;
-            camera.farClipPlane = 100f;
-            camera.cullingMask = Camera.main.cullingMask;
-            CullingGroupManager.Instance.setTargetCamera(camera);
-            camera.depthTextureMode = DepthTextureMode.DepthNormals;
+            _mla = this.gameObject.AddComponent<MouseLookAround>();
+
+            _origCam.GetComponent<CameraController>().enabled = false;
+            _camera = this.gameObject.AddComponent<Camera>();
+            _camera.nearClipPlane = 0.03f;
+            _camera.farClipPlane = 100f;
+            _camera.cullingMask = ~LayerMasks.ID_TERRAINCLIPS;
+            CullingGroupManager.Instance.setTargetCamera(_camera);
+            _camera.depthTextureMode = DepthTextureMode.DepthNormals;
             this.gameObject.AddComponent<AudioListener>();
 
             UIWorldOverlayController.Instance.gameObject.SetActive(false);
+            UIScaledOverlayController.Instance.gameObject.SetActive(false);
+
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -51,31 +56,32 @@ namespace PeepCam
         {
             if (Active)
             {
-                if (cc.isGrounded && Active)
+                if (_cc.isGrounded && Active)
                 {
-                    moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                    moveDirection = transform.TransformDirection(moveDirection);
+                    _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                    _moveDirection = transform.TransformDirection(_moveDirection);
                     if (Input.GetKey(KeyCode.LeftShift))
-                        moveDirection *= runSpeed;
+                        _moveDirection *= _runSpeed;
                     else
-                        moveDirection *= speed;
+                        _moveDirection *= _speed;
 
                     if (Input.GetKeyUp(KeyCode.Space))
-                        moveDirection.y = jumpSpeed;
+                        _moveDirection.y = _jumpSpeed;
 
                 }
-                moveDirection.y -= gravity * Time.deltaTime;
-                cc.Move(moveDirection * Time.deltaTime);
+                _moveDirection.y -= _gravity * Time.deltaTime;
+                _cc.Move(_moveDirection * Time.deltaTime);
             }
         }
 
         public void OnDestroy()
         {
-            Camera.main.gameObject.GetComponent<CameraController>().enabled = true;
+            _origCam.GetComponent<CameraController>().enabled = true;
 
-            CullingGroupManager.Instance.setTargetCamera(Camera.main);
+            CullingGroupManager.Instance.setTargetCamera(_origCam.GetComponent<Camera>());
 
             UIWorldOverlayController.Instance.gameObject.SetActive(true);
+            UIScaledOverlayController.Instance.gameObject.SetActive(true);
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
