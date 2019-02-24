@@ -13,7 +13,7 @@ For issues/bugs, feature requests or anything else you can:
 ## Installation
 
 [comment]: # I suggest you to subscribe to the mod on the workshop for ease of use:  
-[comment]: # https://steamcommunity.com/sharedfiles/filedetails/?id=xxx
+[comment]: # https://steamcommunity.com/sharedfiles/filedetails/?id=1666197015
 
 If you do not use Steam or want to manually install the mod, download the repository and copy the `TheMasterCado@PeepCam/` folder into your `Parkitect/Mods/` folder.
 
