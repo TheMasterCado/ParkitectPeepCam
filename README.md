@@ -2,6 +2,8 @@
 
 Remake of the PeepCam mod for Parkitect. You can become a guest in your park!
 
+You can walk around and see what others see. Be aware that you can walk through scenery, shops and attractions. This is due to the fact that all objects doesn't have colliders.
+
 [![GitHub release](https://img.shields.io/github/release/TheMasterCado/ParkitectPeepCam.svg)](https://github.com/TheMasterCado/ParkitectPeepCam/releases/latest) 
 
 ## Contact
@@ -12,8 +14,8 @@ For issues/bugs, feature requests or anything else you can:
 
 ## Installation
 
-[comment]: # I suggest you to subscribe to the mod on the workshop for ease of use:  
-[comment]: # https://steamcommunity.com/sharedfiles/filedetails/?id=1666197015
+I suggest you to subscribe to the mod on the workshop for ease of use:  
+https://steamcommunity.com/sharedfiles/filedetails/?id=1666197015
 
 If you do not use Steam or want to manually install the mod, download the repository and copy the `TheMasterCado@PeepCam/` folder into your `Parkitect/Mods/` folder.
 
