@@ -21,25 +21,24 @@ namespace PeepCam
         public void Start()
         {
             _origCam = Camera.main.gameObject;
-
+            string tag = _origCam.GetComponent<Camera>().tag;
             _cc = this.gameObject.AddComponent<CharacterController>();
             _cc.radius = 0.3f;
             _cc.height = 0.75f;
 
             _mla = this.gameObject.AddComponent<MouseLookAround>();
 
-            _origCam.GetComponent<CameraController>().enabled = false;
             _camera = this.gameObject.AddComponent<Camera>();
-            _camera.nearClipPlane = 0.03f;
+            _camera.cullingMask = _origCam.GetComponent<Camera>().cullingMask;
+            _camera.gameObject.tag = tag;
+            _camera.nearClipPlane = 0.05f;
             _camera.farClipPlane = 100f;
-            _camera.cullingMask = ~LayerMasks.ID_TERRAINCLIPS;
+            _origCam.SetActive(false);
             CullingGroupManager.Instance.setTargetCamera(_camera);
             _camera.depthTextureMode = DepthTextureMode.DepthNormals;
             this.gameObject.AddComponent<AudioListener>();
 
             UIWorldOverlayController.Instance.gameObject.SetActive(false);
-            UIScaledOverlayController.Instance.gameObject.SetActive(false);
-
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -76,12 +75,12 @@ namespace PeepCam
 
         public void OnDestroy()
         {
-            _origCam.GetComponent<CameraController>().enabled = true;
+            _origCam.SetActive(true);
 
             CullingGroupManager.Instance.setTargetCamera(_origCam.GetComponent<Camera>());
 
             UIWorldOverlayController.Instance.gameObject.SetActive(true);
-            UIScaledOverlayController.Instance.gameObject.SetActive(true);
+            GameController.Instance.cameraController = _origCam.GetComponent<CameraController>();
 
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
