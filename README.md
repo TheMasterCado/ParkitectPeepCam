@@ -22,6 +22,8 @@ If you do not use Steam or want to manually install the mod, download the reposi
 ## Usage
 
 **Press P** while having your mouse over a guest to enter PeepCam. Press P again to exit.
+**WASD** to move around.
+**Left shift** to run.
 
 ## Contributing
 
