@@ -2,7 +2,7 @@
 
 namespace PeepCam
 {
-    public class Main : IMod
+    public class Main : AbstractMod
     {
         private GameObject go;
 
@@ -11,21 +11,21 @@ namespace PeepCam
             SetupKeyBinding();
         }
 
-        public void onEnabled()
+        public override void onEnabled()
         {
             go = new GameObject();
             PeepCam.Instance = go.AddComponent<PeepCam>();
         }
 
-        public void onDisabled()
+        public override void onDisabled()
         {
             Object.Destroy(go);
         }
 
         private void SetupKeyBinding()
         {
-            KeyGroup group = new KeyGroup(Identifier);
-            group.keyGroupName = Name;
+            KeyGroup group = new KeyGroup(getIdentifier());
+            group.keyGroupName = getName();
 
             InputManager.Instance.registerKeyGroup(group);
 
@@ -35,15 +35,41 @@ namespace PeepCam
 
         private void RegisterKey(string identifier, KeyCode keyCode, string name, string description = "")
         {
-            KeyMapping key = new KeyMapping(Identifier + "/" + identifier, keyCode, KeyCode.None);
-            key.keyGroupIdentifier = Identifier;
+            KeyMapping key = new KeyMapping(getIdentifier() + "/" + identifier, keyCode, KeyCode.None);
+            key.keyGroupIdentifier = getIdentifier();
             key.keyName = name;
             key.keyDescription = description;
             InputManager.Instance.registerKeyMapping(key);
         }
 
-        public string Name { get { return "PeepCam"; } }
-        public string Description { get { return "Camera mod to become a guest and visit your own park"; } }
-        public string Identifier { get { return "TheMasterCado@PeepCam"; } }
+        public override bool isMultiplayerModeCompatible()
+        {
+            return true;
+        }
+
+        public override bool isRequiredByAllPlayersInMultiplayerMode()
+        {
+            return false;
+        }
+
+        public override string getName()
+        {
+            return "PeepCam";
+        }
+
+        public override string getDescription()
+        {
+            return "Camera mod to become a guest and visit your own park";
+        }
+
+        public override string getVersionNumber()
+        {
+            return "1.2";
+        }
+
+        public override string getIdentifier()
+        {
+            return "TheMasterCado@PeepCam";
+        }
     }
 }
